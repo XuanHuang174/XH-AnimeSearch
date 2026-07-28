@@ -1,27 +1,38 @@
-# AnimeSearch API source
+# AnimeSearch API Source
 
-## Usage:
+这是 AnimeSearch API 的源代码，此 API 提供从 DMHY 查询资源，以及检查 Magnet 可用性两种功能。
 
-Refer to the API documentation.
+## 用法
 
-## About GET /
+见 `API_DOCUMENTATION.md`
 
-This API may change at any time. 
+## 可用性
 
-In fact, it is a rolling release, with the latest version being deployed directly to production.
+没有任何 SLA，除了愿意花钱的人和这个项目的贡献者。
 
-Therefore, the version code is useless.
+实际 SLA 取决于 Vercel Hobby 计划限额，超额会导致所有人都无法使用。
 
-## Availability
+## 关于 GET /
 
-No SLA is provided except to paying customers or those who have committed to this project.
+从这个接口获取到的任何信息都没有作用。
 
-The actual SLA is controlled by the Vercel Hobby usage limit. Abuse will result in the service becoming unavailable to everyone.
+版本号不会更新，因为没有用。这个 API 采用滚动发行模式，更改会被直接部署至**生产环境**，如果你需要兼容性保证，可用性保证，请自行部署。
 
-## Authentication
+## API 鉴权
 
-Currently, no authentication is required. If abuse is discovered or usage exceeds the limit, authentication will be added.
+目前没有鉴权，接口是公开的。如果发现滥用或使用量过大，会添加鉴权。
 
-## What constitutes abuse?
+公开的接口中，GET /health 是另一个 API 的代理（这个 API 非常贵，望周知），源代码见 `MagnetCheck`，直接调用上游接口会返回 402。
 
-By feeling.
+## 如何定义滥用？
+
+凭感觉。
+
+## 部署
+
+```bash
+uv run main.py
+```
+
+自行部署请将 /health 接口的上游替换为你的自定义实现，`magnetcheck` 不是公共 API.
+
