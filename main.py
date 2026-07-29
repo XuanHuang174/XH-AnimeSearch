@@ -12,7 +12,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://anime-spark-search.lovable.app"
+        "https://dmhy.nalanyinyun.work"
     ],
     allow_methods=["GET"],
     allow_headers=["*"],
