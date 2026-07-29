@@ -4,7 +4,7 @@
 
 本服务提供动漫资源搜索与 Magnet 健康检查能力，供前端调用。
 
-**基础 URL**: `https://your-deployed-domain.vercel.app`（部署后替换为实际域名）
+**基础 URL**: `https://animesearch.nalanyinyun.work`
 
 **在线文档**: 服务启动后可访问 `/docs`（Swagger UI）或 `/redoc`（ReDoc）查看交互式文档。
 
