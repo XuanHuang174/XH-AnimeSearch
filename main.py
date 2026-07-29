@@ -4,7 +4,19 @@ from fastapi.responses import Response
 from src.crawler import search
 from src.magnetcheck import check_health
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://anime-spark-search.lovable.app"
+    ],
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/search")
