@@ -30,6 +30,24 @@ class SecurityTests(unittest.TestCase):
                     {"detail": "Invalid or missing API Key"},
                 )
 
+    def test_healthz_ignores_missing_or_invalid_credentials(self):
+        for headers in (
+            {},
+            {"Authorization": "Bearer wrong-key"},
+            {"X-API-Key": "wrong-key"},
+            {"Authorization": "Basic invalid", "X-API-Key": "wrong-key"},
+        ):
+            with self.subTest(headers=headers):
+                response = self.request("GET", "/healthz", headers=headers)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json(), {"status": "ok"})
+
+    def test_healthz_exemption_does_not_expose_other_paths(self):
+        for path in ("/search", "/health", "/healthz/extra"):
+            with self.subTest(path=path):
+                response = self.request("GET", path)
+                self.assertEqual(response.status_code, 401)
+
     def test_bearer_and_custom_header_are_accepted(self):
         headers_to_test = (
             {"Authorization": f"Bearer {main.API_SECRET_KEY}"},

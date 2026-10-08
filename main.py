@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 DEFAULT_LOCAL_API_KEY = "local-development-only"
 PRODUCTION_ENVIRONMENTS = {"prod", "production"}
+AUTH_EXEMPT_PATHS = frozenset({"/healthz"})
 
 
 def get_api_secret_key() -> str:
@@ -39,6 +40,10 @@ class APIKeyAuthMiddleware(BaseHTTPMiddleware):
         request: Request,
         call_next: RequestResponseEndpoint,
     ) -> StarletteResponse:
+        # Render health probes must work without application credentials.
+        if request.url.path in AUTH_EXEMPT_PATHS:
+            return await call_next(request)
+
         # CORS preflight requests do not include application credentials.
         if request.method == "OPTIONS":
             return await call_next(request)
@@ -82,6 +87,11 @@ app.add_middleware(
     allow_methods=["GET"],
     allow_headers=["Authorization", "X-API-Key"],
 )
+
+
+@app.get("/healthz")
+def healthz_endpoint():
+    return {"status": "ok"}
 
 
 @app.get("/search")
